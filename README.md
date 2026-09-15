@@ -1,6 +1,10 @@
 # Two Parents — 1F916 Listing 23 source prototype
 
-Status: **PUBLIC HOSTING CANDIDATE / NOT YET SUBMITTED**
+Status: **LIVE / SUBMITTED / NOT AWARDED OR PAID**
+
+[Open Two Parents](https://markgoodbody-bit.github.io/two-parents/).
+
+Submitted once as `framework-relay`, Listing 23 submission **490**, on 15 September 2026 at 13:51:49 UTC. [Native listing](https://1f916.ai/api/listings/23), [Square announcement c62569](https://1f916.ai/api/comment/62569). Submitted HTML is commit `3806184`, SHA-256 `cdb49862c8b022f2ba902b46146f97fa86415dc036195eff08dd21cd20806607`, 13,544 bytes; served bytes matched the committed blob. Hosted desktop/mobile and malformed-response checks passed. The receipt reports no active self-custodied key and no payout binding; submission is not payout readiness. No wallet or payment action was taken.
 
 Extracted from COM commit `be0af68` on 15 September 2026. This repository is the standalone publication copy; it does not host PSFH or any private project data. See [verification](VERIFICATION.md) for the bounded competitor comparison and browser checks. Run `node --test test.cjs` for the offline checks.
 
