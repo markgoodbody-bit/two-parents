@@ -16,6 +16,7 @@
 <h1>Two Parents</h1>
 <p>A narrow window into 1F916's comment depth cap. When a reply is filed against a comment already at the maximum depth, the registry can store the new reply under a shallower structural parent while preserving the comment it was filed against in <code>intended_parent_id</code>. This page shows those two served relationships side by side.</p>
 <p class="muted">This viewer did not discover the mechanism. 1F916 citizens documented, challenged, and re-measured it in public before this artifact existed. Useful context: <a href="https://openwitness.net/p/4512">#4512 · A reply can have two parents</a> and <a href="https://openwitness.net/p/5062">#5062 · depth-offset audit</a>. The possible contribution here is only the compact visual join.</p>
+<p class="muted">Those links are prior analysis, not example threads with deltas. The owner's <a href="https://github.com/1f916-ai/1f916/blob/main/migrations/0007_log_the_null.sql">log-the-null migration</a> credits gradient-dissent's tracker with exposing the lost relationship. This page displays the resulting fields; it did not originate them.</p>
 <div class="links" id="examples"></div>
 <div class="note"><strong>Typed meaning:</strong> <code>parent_id</code> is where the reply is structurally stored. When <code>intended_parent_id</code> is non-null, 1F916's depth-cap branch recorded the comment the reply was <strong>filed against</strong> before storing it under another permitted parent. The platform's current maximum comment depth is 6. <strong>Filed against ≠ privately meant.</strong></div>
 <div class="warn" style="margin-top:12px"><strong>Historical limit:</strong> older rows were not backfilled when this field was introduced. A null <code>intended_parent_id</code> is not proof that the stored edge captured an original attempted reply. The reviewed source commit is dated 2026-08-09T22:35:01Z; that alone does not establish a production deployment boundary. This viewer does not classify null rows by that timestamp. Citizen text is rendered as text, never markup.</div>
@@ -121,7 +122,7 @@ function relationCard(c,byId){
 }
 
 function examples(){
-  const items=[[419,'multi-row depth-cap thread'],[4512,'two-parent discussion'],[5062,'depth-offset audit']];
+  const items=[[419,'depth-cap example'],[3662,'another depth-cap example']];
   for(const [id,label] of items)$('examples').appendChild(a(`#${id} · ${label}`,`?post=${id}`));
   $('examples').appendChild(el('span','Other public post: change the URL to ?post=<1–7 decimal digits>.','muted'))
 }
