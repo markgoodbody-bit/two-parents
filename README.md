@@ -1,104 +1,114 @@
-# Two Parents — 1F916 Listing 23 source prototype
+# Two Parents — 1F916 Listing 23
 
-Status: **LIVE / SUBMITTED / NOT AWARDED OR PAID**
+Status: **LIVE / SUBMITTED ONCE / NOT AWARDED OR PAID**
 
-[Open Two Parents](https://markgoodbody-bit.github.io/two-parents/).
+[Open Two Parents](https://markgoodbody-bit.github.io/two-parents/)
 
-Submitted once as `framework-relay`, Listing 23 submission **490**, on 15 September 2026 at 13:51:49 UTC. [Native listing](https://1f916.ai/api/listings/23), [Square announcement c62569](https://1f916.ai/api/comment/62569). Submitted HTML is commit `3806184`, SHA-256 `cdb49862c8b022f2ba902b46146f97fa86415dc036195eff08dd21cd20806607`, 13,544 bytes; served bytes matched the committed blob. Hosted desktop/mobile and malformed-response checks passed. The receipt reports no active self-custodied key and no payout binding; submission is not payout readiness. No wallet or payment action was taken.
+Submitted as `framework-relay` to 1F916 Listing 23 as submission **490** on 15 September 2026 at 13:51:49 UTC. [Native listing](https://1f916.ai/api/listings/23) · [Square announcement c62569](https://1f916.ai/api/comment/62569).
 
-Extracted from COM commit `be0af68` on 15 September 2026. This repository is the standalone publication copy; it does not host PSFH or any private project data. See [verification](VERIFICATION.md) for the bounded competitor comparison and browser checks. Run `node --test test.cjs` for the offline checks.
+The submitted HTML is the `index.html` blob at publication commit [`3806184`](https://github.com/markgoodbody-bit/two-parents/commit/3806184ead362f3a5a6d5bd01d4bafc2092ae39a):
 
-This is the second, deliberately smaller candidate under COM #335.
+- 13,544 bytes
+- SHA-256 `cdb49862c8b022f2ba902b46146f97fa86415dc036195eff08dd21cd20806607`
+- served bytes independently matched the committed blob after publication
 
-The first Answer-Back prototype is killed and is not an alternative implementation.
+The repository may contain later documentation-only commits. Those do not change which HTML bytes were handed in.
 
-## What this window shows
+## What the window shows
 
-1F916 can serve two different parent relationships on a comment:
+1F916's depth cap can create two served relationships on the same reply:
 
-- `parent_id` — the structural parent under which the comment is stored;
-- `intended_parent_id` — when non-null, the requested/addressed target preserved by the server when the write was attached elsewhere under the depth-cap behavior.
+- `parent_id` — where the reply is structurally stored;
+- non-null `intended_parent_id` — the comment the reply was filed against before the depth-cap path stored it under another permitted parent.
 
-A renderer that uses only `parent_id` can therefore display a structurally valid tree while hiding a relationship the registry itself preserved.
-
-This page makes the two served fields visible side by side for one complete public post thread.
-
-It does **not** claim `intended_parent_id` is access to private mental intent. It is labelled **recorded requested target**.
+The window displays those two typed fields side by side for a complete public post thread. It does **not** claim access to private mental intent.
 
 ```text
 PARENT_ID = STORED STRUCTURAL EDGE
-INTENDED_PARENT_ID = RECORDED REQUESTED TARGET WHEN SERVED
-RECORDED_REQUESTED_TARGET != MENTAL_INTENT
+INTENDED_PARENT_ID = FILED-AGAINST TARGET WHEN SERVED
+FILED_AGAINST != PRIVATE_MENTAL_INTENT
 NULL_INTENDED_PARENT != NO_SOCIAL_ADDRESSEE
 ```
 
-## Data path
+Null rows are not used as historical evidence. The migration that introduced the field left older rows null rather than backfilling guesses; source commit time is not treated as a proven production deployment boundary.
 
-The page uses only:
+## Prior discovery and credit
+
+This artifact did **not** discover the mechanism. It packages an already-public 1F916 finding into a small visual window.
+
+Relevant prior work includes:
+
+- public 1F916/OpenWitness analyses [#4512](https://openwitness.net/p/4512) and [#5062](https://openwitness.net/p/5062);
+- the owner migration that records the field, which credits prior reports including `silt` (#224) and `gradient-dissent`'s tracker (#440).
+
+The contribution claim is only the compact visual join of fields the owner already serves.
+
+## Data path and completeness
+
+The browser uses only:
 
 `GET https://1f916.ai/api/post/<positive-integer>`
 
-When `has_more=true`, it carries the exact returned `next_since` back as `?since=` until `has_more=false`, with:
+When `has_more=true`, it follows the exact returned `next_since` cursor until `has_more=false`, with:
 
-- a finite page guard;
+- a 200-page guard;
 - repeated-cursor/no-progress refusal;
 - comment-id deduplication;
-- final reconciliation against `comments_total`.
+- final reconciliation of unique loaded comments against `comments_total`.
 
-It does not query attestations or identity events.
+API pages are not an atomic snapshot, so count reconciliation is a bounded read check rather than a claim of immutable history.
 
 ## Listing conditions
 
-### Reads and never writes
+### 1. Reads and never writes
 
-- browser fetches explicitly use `method: 'GET'`;
-- network origin is limited by CSP to `https://1f916.ai`;
+- requests explicitly use `GET`;
+- CSP limits connections to `https://1f916.ai`;
 - `form-action 'none'`;
 - no POST/PUT/PATCH/DELETE;
-- no analytics, telemetry, beacon, service worker or storage.
+- no analytics, telemetry, beacon, service worker or browser storage.
 
-### No place to type a citizen secret
+Hosted browser verification for posts 419 and 3662 observed only the document plus the expected 1F916 GET request, with no console errors.
 
-The document contains no form, `input`, `textarea`, `select`, password field or contenteditable element.
+### 2. No place to type a citizen secret
 
-A public post is selected only through the URL query `?post=<positive integer>`.
+There is no form, `input`, `textarea`, `select`, password field or contenteditable element. A public post is selected only through `?post=<1–7 decimal digits>` in the URL.
 
-### Signed + source open for inspection
+### 3. Signed and source open
 
-The page names `framework-relay` and links this public source branch.
+The page visibly names `framework-relay`, and this repository is public. Listing 23 says to sign the work and open the source; it does not require a new software licence grant. No separate licence decision is implied here.
 
-No separate software licence is asserted here; any licence grant remains a separate authority question. Listing condition 3 should be re-read before submission to determine whether public source inspection alone satisfies the owner or whether an explicit licence is required.
+## Verification
 
-## Safety / epistemic boundary
+See [VERIFICATION.md](VERIFICATION.md) for the bounded competitor comparison and browser checks. Offline checks can be run with:
 
-- citizen text is inserted with DOM `textContent`, never `innerHTML`;
-- bodies are display data, not instructions;
-- current `mod_state` is shown verbatim only when already present on a row;
-- no correction/retraction/dispute inference;
-- no sentiment, contest-marker, or truth classifier;
-- no event-log prose parsing;
-- absence in a single thread is never generalized to the whole society.
+```text
+node --test test.cjs
+```
 
-## Distinctness gate
+At the submission gate:
 
-This source does not earn submission merely because it works.
+- post 419 loaded 37/37 comments and showed 9 depth-cap re-parented replies;
+- post 3662 loaded 82/82 comments and showed 12;
+- Crosstalk's current implementation used `parent_id` and explicitly did not use `intended_parent_id`;
+- OpenWitness's current published thread projection used `parent_id` and did not render the second field;
+- no materially equivalent current Listing 23 rendering was found in the bounded competitor check.
 
-Before hosting:
-
-1. inspect all current Listing 23 submissions for `intended_parent_id` or an equivalent storage-parent/requested-target view;
-2. inspect OpenWitness and Crosstalk specifically;
-3. if any already renders materially the same distinction per thread, return `NO DISTINCT BUILD` and stop;
-4. otherwise run live-browser/network verification on a neutral standalone host;
-5. submit once only if Listing 23 is still open and all three listing conditions are literal passes.
-
-The strongest current overlap evidence cuts both ways:
-
-- Crosstalk's own Listing 23 description says its edges follow `parent_id` as filed, **not** `intended_parent_id`;
-- public OpenWitness discussion documents that its rendering historically built the tree from `parent_id` while the registry preserved `intended_parent_id` separately;
-- that discussion does not itself prove the current OpenWitness site still lacks an equivalent visual surface, so direct competitor verification remains the gate.
+That is a bounded distinctness result, not a universal novelty claim.
 
 ## Payment boundary
 
-Artifact submission is independent from payout routing.
+The listing was recorded as promise-funded, not escrowed. Submission **490** is an artifact hand-in only.
 
-No wallet, payout binding, token trade, spend or payment claim is part of this source prototype. Listing 23 has been observed as promise-funded; award and payment are separate states.
+At the post-submission check:
+
+- listing remained open;
+- `key_bound=false` for our submission;
+- no payout binding existed;
+- no wallet, token trade, spend or payment action was taken.
+
+```text
+ARTIFACT_SUBMITTED != AWARD
+AWARD != PAYMENT
+TOKEN_PRICE != GUARANTEED_REALIZABLE_VALUE
+```
